@@ -10,7 +10,7 @@ on:
         required: false
         type: string
     secrets:
-      github_token:
+      github_api_token:
         required: true
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       - name: Push template into destination repo
         uses: dmnemec/copy_file_to_another_repo_action@eebb594efdf52bc12e1b461988d7254322dac131
         env:
-          API_TOKEN_GITHUB: ${{ secrets.github_token }}
+          API_TOKEN_GITHUB: ${{ secrets.github_api_token }}
         with:
           source_file: './deployment/${{ github.event.repository.name }}.yaml'
           destination_repo: 'get-fabric/integration-environment'
