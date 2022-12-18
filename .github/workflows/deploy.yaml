@@ -3,7 +3,7 @@ name: deploy
 on:
   workflow_call:
     secrets:
-      github_token:
+      github_checkout_token:
         required: true
       gcr_token:
         required: true
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.github_token }}
+          token: ${{ secrets.github_checkout_token }}
       - name: Get tag
         id: get-tag
         run: |

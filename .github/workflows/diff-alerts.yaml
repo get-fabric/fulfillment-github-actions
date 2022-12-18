@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      github_token:
+      github_comment_pr_token:
         required: true
       cortex_api_key:
         required: true
@@ -28,6 +28,6 @@ jobs:
           NAMESPACES: ${{ inputs.namespaces }}
       - uses: unsplash/comment-on-pr@v1.2.0
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.github_comment_pr_token }}
         with:
           msg: "```\n${{ steps.diff_rules.outputs.detailed }}\n```"

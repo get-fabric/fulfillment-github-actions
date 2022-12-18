@@ -10,7 +10,7 @@ on:
         required: true
         type: string
     secrets:
-      github_token:
+      node_auth_token:
         required: true
       npm_token:
         required: true
@@ -36,5 +36,5 @@ jobs:
       - run: npm publish
         working-directory: ${{ inputs.package_path }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.github_token }}
+          NODE_AUTH_TOKEN: ${{ secrets.node_auth_token }}
           NPM_TOKEN: ${{ secrets.npm_token }}
