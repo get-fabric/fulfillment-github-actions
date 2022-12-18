@@ -1,0 +1,27 @@
+name: sync-alerts
+
+on:
+  workflow_call:
+    inputs:
+      namespaces:
+        required: true
+        type: string
+    secrets:
+      cortex_api_key:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: sync-rules
+        uses: grafana/cortex-rules-action@v0.8.0
+        env:
+          CORTEX_ADDRESS: https://prometheus-us-central1.grafana.net
+          CORTEX_TENANT_ID: 22258
+          CORTEX_API_KEY: ${{ secrets.cortex_api_key }}
+          ACTION: sync
+          RULES_DIR: './alerts/'
+          NAMESPACES: ${{ inputs.namespaces }}

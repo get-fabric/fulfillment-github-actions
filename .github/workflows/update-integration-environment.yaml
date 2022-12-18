@@ -1,0 +1,50 @@
+name: update-integration-environment
+
+on:
+  workflow_call:
+    inputs:
+      namespace:
+        required: true
+        type: string
+      image_tag:
+        required: false
+        type: string
+    secrets:
+      github_token:
+        required: true
+
+jobs:
+  update-environment-repo:
+    name: Generate Helm template and Git push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'main'
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.10.0
+
+      - name: Update Helm dependencies
+        working-directory: ./deployment
+        run: helm dep update
+
+      - name: Generate Helm template
+        working-directory: ./deployment
+        run: helm template -f values.integration.yaml ${{ github.event.repository.name }} . > ${{ github.event.repository.name }}.yaml
+
+      - name: Push template into destination repo
+        uses: dmnemec/copy_file_to_another_repo_action@eebb594efdf52bc12e1b461988d7254322dac131
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.github_token }}
+        with:
+          source_file: './deployment/${{ github.event.repository.name }}.yaml'
+          destination_repo: 'get-fabric/integration-environment'
+          destination_branch: 'main'
+          destination_folder: 'deployments/${{ inputs.namespace }}'
+          user_email: 'integration-environment@getfabric.com'
+          user_name: 'integration-environment'
+          commit_message: 'updated ${{ github.event.repository.name }}'

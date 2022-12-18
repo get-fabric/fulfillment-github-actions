@@ -1,0 +1,33 @@
+name: diff-alerts
+
+on:
+  workflow_call:
+    inputs:
+      namespaces:
+        required: true
+        type: string
+    secrets:
+      github_token:
+        required: true
+      cortex_api_key:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: diff_rules
+        uses: grafana/cortex-rules-action@v0.8.0
+        env:
+          CORTEX_ADDRESS: https://prometheus-us-central1.grafana.net
+          CORTEX_TENANT_ID: 22258
+          CORTEX_API_KEY: ${{ secrets.cortex_api_key }}
+          ACTION: diff
+          RULES_DIR: './alerts/'
+          NAMESPACES: ${{ inputs.namespaces }}
+      - uses: unsplash/comment-on-pr@v1.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          msg: "```\n${{ steps.diff_rules.outputs.detailed }}\n```"
