@@ -16,9 +16,9 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: diff_rules
-        uses: grafana/cortex-rules-action@v0.8.0
+        uses: grafana/cortex-rules-action@v0.9.1
         env:
           CORTEX_ADDRESS: https://prometheus-us-central1.grafana.net
           CORTEX_TENANT_ID: 22258
@@ -26,7 +26,7 @@ jobs:
           ACTION: diff
           RULES_DIR: './alerts/'
           NAMESPACES: ${{ inputs.namespaces }}
-      - uses: unsplash/comment-on-pr@v1.2.0
+      - uses: unsplash/comment-on-pr@v1.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.github_comment_pr_token }}
         with:
