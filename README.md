@@ -4,14 +4,13 @@ This repository holds GitHub workflows that are commonly used by fulfillment V2 
 
 See below for more information on specific workflows.
 
-
 ## update-integration-environment
 This repository is a GitHub workflow that is used to load services k8s definitions into the [integration-environment](https://github.com/get-fabric/integration-environment) repo.
 
 ### Usage
 
-To add a service to the integration environment add a workflow named `update-integration-environment.yml` to your service github workflows folder:
-```
+To add a service to the integration environment add a workflow named `update-integration-environment.yml` to your service GitHub workflows folder:
+```yaml
 name: update-integration-environment
 
 on:
@@ -24,7 +23,7 @@ on:
 
 jobs:
   execute:
-    uses: get-fabric/fulfillment-github-actions/.github/workflows/update-integration-environment.yaml@main
+    uses: get-fabric/fulfillment-github-actions/.github/workflows/update-integration-environment.yaml@v1
     if: ${{ github.event.head_commit.message != 'initial commit' }}
     with:
       namespace: fulfillment
